@@ -30,6 +30,7 @@ public class Team1482Robot extends IterativeRobot {
     public void disabledInit() {
         
     //Start autonomous
+    //foo
     }
     public void autonomousInit() {
         
