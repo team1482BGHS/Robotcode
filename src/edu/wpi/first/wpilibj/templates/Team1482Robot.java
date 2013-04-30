@@ -29,9 +29,11 @@ public class Team1482Robot extends IterativeRobot {
     //Do when the robot is disabled
     public void disabledInit() {
         
-    
+    //Start autonomous
     }
-    
+    public void autonomousInit() {
+        
+    }
     
     /**
      * This function is called periodically during autonomous
