@@ -23,16 +23,19 @@ public class Team1482Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        System.out.println("RobotInit() completed. \n")
 
     }
     
     //Do when the robot is disabled
     public void disabledInit() {
+        m_disabledPeriodicLoops = 0 //resets loop counter on disabling
         
     }
     //*************Autonomous*************
     
     public void autonomousInit() {
+        m_autoPeriodicLoops = 0 //resets loop counter on entering auto
         getWatchdog().setEnabled(false);
         getWatchdog().setExpiration(0.5);
     }
@@ -46,6 +49,7 @@ public class Team1482Robot extends IterativeRobot {
 
     //*************TELE OP*************
     public void teleopInit(){
+        m_telePeriodicLoops = 0 //resets loop counter on entering tele
         getWatchdog().setEnabled(true);
     }
     
