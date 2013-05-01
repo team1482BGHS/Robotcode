@@ -22,10 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Team1482Robot extends IterativeRobot {
 
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
+
     //Initlise loop counters
     int m_disabledPeriodicLoops;
     int m_autoPeriodicLoops;
@@ -44,6 +41,7 @@ public class Team1482Robot extends IterativeRobot {
     Compressor airCompressor = new Compressor(1,1);
     
     //************Initalise************
+    //This is designed to initalise any code when your robot starts up
     public void robotInit() {
         System.out.println("RobotInit() completed. \n");
 
@@ -74,7 +72,7 @@ public class Team1482Robot extends IterativeRobot {
         m_telePeriodicLoops = 0; //resets loop counter on entering tele
         getWatchdog().setEnabled(true);
         airCompressor.start();
-        //Restact any solonides
+        //Retact any solonides
     }
 
     public void teleopPeriodic() {
@@ -87,13 +85,15 @@ public class Team1482Robot extends IterativeRobot {
         Timer.delay(0.005);
     }
 
-    /**
-     * This function is called periodically during test mode
-     */
+    //*************Test mode*************
     public void testPeriodic() {
+        //Perodically feed the watchdog
         getWatchdog().feed();
     }
 
+    
+    
+    //*************Functions*************
     /* Example code!! modify! */
     public void DemonstrateJoystickButtons(Joystick currStick,
             boolean[] buttonPreviouslyPressed,
