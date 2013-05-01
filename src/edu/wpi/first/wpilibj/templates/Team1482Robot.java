@@ -39,7 +39,10 @@ public class Team1482Robot extends IterativeRobot {
     
     //Setup air compressor
     Compressor airCompressor = new Compressor(1,1);
-    
+    Solenoid lift      = new Solenoid(1);
+    Solenoid liftReset = new Solenoid(2);
+    Solenoid drop      = new Solenoid(3);
+    Solenoid dropReset = new Solenoid(4);
     //************Initalise************
     //This is designed to initalise any code when your robot starts up
     public void robotInit() {
@@ -96,7 +99,6 @@ public class Team1482Robot extends IterativeRobot {
     }
 
     
-    
     //*************Functions*************
     /* Example code!! modify! */
     public void DemonstrateJoystickButtons(Joystick currStick,
@@ -104,7 +106,7 @@ public class Team1482Robot extends IterativeRobot {
             String stickString,
             Solenoid solenoids[]) {
 
-        boolean outputGenerated = false;    	// flag for whether or not output is generated for a button
+        boolean outputGenerated = false;        // flag for whether or not output is generated for a button
         int numOfButtonPressed = 0;		// 0 if no buttons pressed, -1 if multiple buttons pressed
         int buttonNum;
 
@@ -121,6 +123,7 @@ public class Team1482Robot extends IterativeRobot {
                         // print out a heading if no other button pressed this cycle
                         outputGenerated = true;
                         System.out.println("button pressed:" + stickString);
+                        
                     }
                     System.out.println(" " + buttonNum);
                 }
