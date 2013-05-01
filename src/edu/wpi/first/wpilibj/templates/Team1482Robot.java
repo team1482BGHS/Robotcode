@@ -70,6 +70,7 @@ public class Team1482Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     }
 
+    
     //*************TELE OP*************
     public void teleopInit() {
         m_telePeriodicLoops = 0; //resets loop counter on entering tele
