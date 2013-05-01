@@ -89,6 +89,7 @@ public class Team1482Robot extends IterativeRobot {
             Timer.delay(0.005);
         } else {
             Timer.delay(0.01);
+            getWatchdog().feed();
         }
     }
 
