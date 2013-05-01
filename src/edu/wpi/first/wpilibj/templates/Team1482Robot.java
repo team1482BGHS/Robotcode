@@ -29,11 +29,12 @@ public class Team1482Robot extends IterativeRobot {
     //Do when the robot is disabled
     public void disabledInit() {
         
-    //Start autonomous
-    //foo
     }
+    //*************Autonomous*************
+    
     public void autonomousInit() {
-        
+        getWatchdog().setEnabled(false);
+        getWatchdog().setExpiration(0.5);
     }
     
     /**
@@ -43,18 +44,20 @@ public class Team1482Robot extends IterativeRobot {
 
     }
 
-    /**
-     * This function is called periodically during operator control
-     */
+    //*************TELE OP*************
+    public void teleopInit(){
+        getWatchdog().setEnabled(true);
+    }
+    
     public void teleopPeriodic() {
-        
+        getWatchdog().feed();
     }
     
     /**
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-    
+        getWatchdog().feed();
     }
     
 }
