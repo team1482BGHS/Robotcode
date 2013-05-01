@@ -79,10 +79,14 @@ public class Team1482Robot extends IterativeRobot {
     }
 
     public void teleopContinuous() {
-        drive.arcadeDrive(driveJoystick);
-        getWatchdog().feed();
-        System.out.println("Fead watchdog");
-        Timer.delay(0.005);
+        if (isEnabled()) {
+            drive.arcadeDrive(driveJoystick);
+            getWatchdog().feed();
+            System.out.println("Fead watchdog");
+            Timer.delay(0.005);
+        } else {
+            Timer.delay(0.01);
+        }
     }
 
     //*************Test mode*************
