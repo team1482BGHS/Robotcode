@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -38,20 +39,21 @@ public class Team1482Robot extends IterativeRobot {
     Joystick driveJoystick = new Joystick(1);
     Joystick shootJoystick = new Joystick(2);
     public static int NUM_JOYSTICK_BUTTONS = 16;
-
     
-    //Initalise any parts of the robot
+    //Setup air compressor
+    Compressor airCompressor = new Compressor(1,1);
+    
+    //************Initalise************
     public void robotInit() {
         System.out.println("RobotInit() completed. \n");
 
     }
 
-    //Do when the robot is disabled
+    //************Dissabled************
     public void disabledInit() {
         m_disabledPeriodicLoops = 0; //resets loop counter on disabling
         Timer.delay(0.002);
         getWatchdog().feed();
-
     }
     //*************Autonomous*************
 
@@ -71,6 +73,8 @@ public class Team1482Robot extends IterativeRobot {
     public void teleopInit() {
         m_telePeriodicLoops = 0; //resets loop counter on entering tele
         getWatchdog().setEnabled(true);
+        airCompressor.start();
+        //Restact any solonides
     }
 
     public void teleopPeriodic() {
@@ -96,7 +100,7 @@ public class Team1482Robot extends IterativeRobot {
             String stickString,
             Solenoid solenoids[]) {
 
-        boolean outputGenerated = false;		// flag for whether or not output is generated for a button
+        boolean outputGenerated = false;    	// flag for whether or not output is generated for a button
         int numOfButtonPressed = 0;		// 0 if no buttons pressed, -1 if multiple buttons pressed
         int buttonNum;
 
@@ -147,4 +151,3 @@ public class Team1482Robot extends IterativeRobot {
         }
     }
 }
-
