@@ -22,6 +22,18 @@ public class Team1482Robot extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+     
+     
+     int m_dsPacketsReceivedInCurrentSecond;
+    
+    RobotDrive drive = new RobotDrive(1, 2, 3, 4);
+    
+    Joystick driveJoystick = new Joystick(1);
+    Joystick shootJoystick = new Joystick(2);
+    public static int NUM_JOYSTICK_BUTTONS = 16;
+    
+    
+    
     public void robotInit() {
         System.out.println("RobotInit() completed. \n")
 
@@ -54,7 +66,12 @@ public class Team1482Robot extends IterativeRobot {
     }
     
     public void teleopPeriodic() {
+    }
+    public void teleopContinuous() {
+        drive.arcadeDrive(driveJoystick);
         getWatchdog().feed();
+        System.out.println("Fead watchdog");
+        Timer.delay(0.005);
     }
     
     /**
@@ -64,4 +81,62 @@ public class Team1482Robot extends IterativeRobot {
         getWatchdog().feed();
     }
     
+    
+    /* Example code!! modify! */
+    public void DemonstrateJoystickButtons(Joystick currStick,
+    								boolean[] buttonPreviouslyPressed,
+									String stickString,
+									Solenoid solenoids[]) {
+
+		boolean outputGenerated = false;		// flag for whether or not output is generated for a button
+		int numOfButtonPressed = 0;		// 0 if no buttons pressed, -1 if multiple buttons pressed
+
+		/* Iterate over all the buttons on the joystick, checking to see if each is pressed
+		 * If a button is pressed, check to see if it is newly pressed; if so, print out a
+		 * message on the console
+		 */
+		for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
+			if (currStick.getRawButton(buttonNum)) {
+				// the current button is pressed, now act accordingly...
+				if (!buttonPreviouslyPressed[buttonNum]) {
+					// button newly pressed; print out a message
+					if (!outputGenerated) {
+						// print out a heading if no other button pressed this cycle
+						outputGenerated = true;
+						System.out.println("button pressed:" + stickString);
+					}
+					System.out.println(" " + buttonNum);
+				}
+				// remember that this button is pressed for the next iteration
+				buttonPreviouslyPressed[buttonNum] = true;
+
+				// set numOfButtonPressed appropriately
+				if (numOfButtonPressed == 0) {
+					// no button pressed yet this time through, set the number correctly
+					numOfButtonPressed = buttonNum;
+				} else {
+					// another button (or buttons) must have already been pressed, set appropriately
+					numOfButtonPressed = -1;
+				}
+			} else {
+				buttonPreviouslyPressed[buttonNum] = false;
+			}
+		}
+
+		// after iterating through all the buttons, add a newline to output if needed
+		if (outputGenerated) {
+			System.out.println("\n");
+		}
+
+		if (numOfButtonPressed == -1) {
+			// multiple buttons were pressed, display as if button 15 was pressed
+			//DisplayBinaryNumberOnSolenoidLEDs(15, solenoids);
+		} else {
+			// display the number of the button pressed on the solenoids;
+			// note that if no button was pressed (0), the solenoid display will be cleared (set to 0)
+			//DisplayBinaryNumberOnSolenoidLEDs(numOfButtonPressed, solenoids);
+		}
+	}
+}
+
 }
