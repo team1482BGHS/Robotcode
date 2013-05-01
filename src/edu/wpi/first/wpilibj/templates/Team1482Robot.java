@@ -30,7 +30,7 @@ public class Team1482Robot extends IterativeRobot {
     
     int m_dsPacketsReceivedInCurrentSecond;
     
-    RobotDrive drive = new RobotDrive(1, 2, 3, 4);
+    RobotDrive drive = new RobotDrive(1, 2);
     
     //Set up joystick and driving refrence
     Joystick driveJoystick = new Joystick(1);
