@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
-
+import edu.wpi.first.wpilibj.Talon;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -31,16 +31,25 @@ public class Team1482Robot extends IterativeRobot {
 
     int m_dsPacketsReceivedInCurrentSecond;
     
+    //Set up arcade drive
     RobotDrive drive = new RobotDrive(1, 2);
     
-    //Set up joystick and driving refrence
+    //Set up Talons to do whatever (uncomment as needed)
+    //Talon pwm3_motor = new Talon(3);
+    //Talon pwm4_motor = new Talon(4);
+    //Talon pwm5_motor = new Talon(5);
+    //Talon pwm6_motor = new Talon(6);
+    
+    //Set up joystick
     Joystick drivestick = new Joystick(1);
     Joystick shootstick = new Joystick(2);
     public static int NUM_JOYSTICK_BUTTONS = 16;
-    //fase next 2 out
+    
+    //Phase next two out
     boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
-    //Intigrate
+    
+    //Integrate
     boolean[] m_shootStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];    
         
     //Set up air compressor
