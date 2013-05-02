@@ -53,7 +53,12 @@ public class Team1482Robot extends IterativeRobot {
 
     //************Disabled************
     public void disabledInit() {
+    	System.out.println("Robot dissabled");
         m_disabledPeriodicLoops = 0; //resets loop counter on disabling
+
+    }
+    public void disabledPeriodic() {
+    	m_disabledPeriodicLoops++;
         Timer.delay(0.002);
         getWatchdog().feed();
     }
@@ -63,6 +68,7 @@ public class Team1482Robot extends IterativeRobot {
 	* This function is called once when entering autonomous
 	*/
     public void autonomousInit() {
+    	System.out.println("Autonomous started");
         m_autoPeriodicLoops = 0; //resets loop counter on entering auto
         getWatchdog().setEnabled(false);
         getWatchdog().setExpiration(0.5);
@@ -80,6 +86,7 @@ public class Team1482Robot extends IterativeRobot {
 	* This function is called once when entering teleop
 	*/
     public void teleopInit() {
+    	System.out.println("Starting Teleop");
         m_telePeriodicLoops = 0; //resets loop counter on entering tele
         getWatchdog().setEnabled(true);
         airCompressor.start();
@@ -89,6 +96,7 @@ public class Team1482Robot extends IterativeRobot {
 	* This function is called periodically during teleop
 	*/
     public void teleopPeriodic() {
+    	m_telePeriodicLoops++;
     }
 	/**
 	* This function runs continuously during teleop
@@ -97,7 +105,6 @@ public class Team1482Robot extends IterativeRobot {
         if (isEnabled()) {
             drive.arcadeDrive(drivestick);
             getWatchdog().feed();
-            System.out.println("Feed Watchdog");
             Timer.delay(0.005);
         }
 		else {
@@ -108,6 +115,7 @@ public class Team1482Robot extends IterativeRobot {
 
     //************Test Mode************
     public void testPeriodic() {
+    	System.out.println("Starting test mode");
         //Periodically feed the Watchdog
         getWatchdog().feed();
     }
