@@ -124,18 +124,17 @@ public class Team1482Robot extends IterativeRobot {
         if (isEnabled()) {
             m_teleContinuousLoops++;
             drive.arcadeDrive(drivestick);
+
+
+            if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "held") {
+                System.out.println("Button 1 held");
+            } else if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed") {
+                System.out.println("Button 1 just pressed");
+            }
+
             getWatchdog().feed();
             Timer.delay(0.005);
-            
-            if(ButtonToggle(shootstick, m_shootStickButtonState, 1) == "held"){
-                System.out.println("Button 1 held");
-            }
-            else if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed"){
-                System.out.println("Button 1 just pressed");
-            
-            }
-        }
-		else {
+        } else {
             Timer.delay(0.01);
             getWatchdog().feed();
         }
