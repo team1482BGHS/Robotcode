@@ -37,7 +37,12 @@ public class Team1482Robot extends IterativeRobot {
     Joystick drivestick = new Joystick(1);
     Joystick shootstick = new Joystick(2);
     public static int NUM_JOYSTICK_BUTTONS = 16;
-    
+    //fase next 2 out
+    boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
+    boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
+    //Intigrate
+    boolean[] m_shootStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];    
+        
     //Set up air compressor
     Compressor airCompressor = new Compressor(1,1);
     Solenoid lift      = new Solenoid(1);
@@ -45,6 +50,18 @@ public class Team1482Robot extends IterativeRobot {
     Solenoid drop      = new Solenoid(3);
     Solenoid dropreset = new Solenoid(4);
     
+
+    public Team1482Robot() {
+        System.out.println("BuiltinDefaultCode Constructor Started\n");
+        
+        
+        int buttonNum = 1;
+        for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
+            m_rightStickButtonState[buttonNum] = false;
+            m_leftStickButtonState[buttonNum] = false;
+            m_shootStickButtonState[buttonNum] = false;
+        }        
+    }
     //************Initalize************
     //Any code in this section will run once when the robot is turned on.
     public void robotInit() {
@@ -109,6 +126,14 @@ public class Team1482Robot extends IterativeRobot {
             drive.arcadeDrive(drivestick);
             getWatchdog().feed();
             Timer.delay(0.005);
+            
+            if(ButtonToggle(shootstick, m_shootStickButtonState, 1) == "held"){
+                System.out.println("Button 1 held");
+            }
+            else if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed"){
+                System.out.println("Button 1 just pressed");
+            
+            }
         }
 		else {
             Timer.delay(0.01);
@@ -125,7 +150,33 @@ public class Team1482Robot extends IterativeRobot {
 
     
     //************Functions************
-    /* Example code!! Modify! */
+    public String ButtonToggle(Joystick currStick, boolean[] buttonPreviouslyPressed, int buttonNum) {
+
+
+        if (currStick.getRawButton(buttonNum)) {  //Is button pressed?
+            if (!buttonPreviouslyPressed[buttonNum]) {   //Was this button pressed last cycle
+                //Set button to now pressed
+                buttonPreviouslyPressed[buttonNum] = true;
+                return "pressed";
+
+            } else {
+                //Button is pressed and was also pressed last cycle
+                return "held";
+            }
+        } //Button not pressed at all
+        else {
+            //button is not currentally pressed
+            buttonPreviouslyPressed[buttonNum] = false;
+
+            return null;
+        }
+    }
+            
+ //Commented out
+ //Can be removed later
+    
+    
+    /*
     public void DemonstrateJoystickButtons(Joystick currStick,
             boolean[] buttonPreviouslyPressed,
             String stickString,
@@ -138,7 +189,7 @@ public class Team1482Robot extends IterativeRobot {
         /* Iterate over all the buttons on the joystick, checking to see if each is pressed
          * If a button is pressed, check to see if it is newly pressed; if so, print out a
          * message on the console
-         */
+         
         for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
             if (currStick.getRawButton(buttonNum)) {
                 //the current button is pressed, now act accordingly...
@@ -185,4 +236,5 @@ public class Team1482Robot extends IterativeRobot {
             //DisplayBinaryNumberOnSolenoidLEDs(numOfButtonPressed, solenoids);
         }
     }
+    */
 }
