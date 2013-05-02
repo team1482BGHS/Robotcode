@@ -27,7 +27,8 @@ public class Team1482Robot extends IterativeRobot {
     int m_disabledPeriodicLoops;
     int m_autoPeriodicLoops;
     int m_telePeriodicLoops;
-    
+    int m_teleContinuousLoops;
+
     int m_dsPacketsReceivedInCurrentSecond;
     
     RobotDrive drive = new RobotDrive(1, 2);
@@ -53,7 +54,7 @@ public class Team1482Robot extends IterativeRobot {
 
     //************Disabled************
     public void disabledInit() {
-    	System.out.println("Robot dissabled");
+    	System.out.println("Robot disabled");
         m_disabledPeriodicLoops = 0; //resets loop counter on disabling
 
     }
@@ -87,7 +88,8 @@ public class Team1482Robot extends IterativeRobot {
 	*/
     public void teleopInit() {
     	System.out.println("Starting Teleop");
-        m_telePeriodicLoops = 0; //resets loop counter on entering tele
+        m_telePeriodicLoops = 0;
+        m_teleContinuousLoops = 0; //resets loop counters on entering tele 
         getWatchdog().setEnabled(true);
         airCompressor.start();
         //Retract all solenoids
@@ -103,6 +105,7 @@ public class Team1482Robot extends IterativeRobot {
 	*/
     public void teleopContinuous() {
         if (isEnabled()) {
+            m_teleContinuousLoops++;
             drive.arcadeDrive(drivestick);
             getWatchdog().feed();
             Timer.delay(0.005);
@@ -115,7 +118,7 @@ public class Team1482Robot extends IterativeRobot {
 
     //************Test Mode************
     public void testPeriodic() {
-    	System.out.println("Starting test mode");
+    	System.out.println("Starting Test Mode");
         //Periodically feed the Watchdog
         getWatchdog().feed();
     }
