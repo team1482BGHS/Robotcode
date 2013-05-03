@@ -50,12 +50,12 @@ public class Team1482Robot extends IterativeRobot {
     Joystick drivestick = new Joystick(1);
     Joystick shootstick = new Joystick(2);
     public static int NUM_JOYSTICK_BUTTONS = 16;
-    
-    //Phase next two out
+    //Declair joystick buttons
     boolean[] m_driveStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_shootStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];    
         
-    //Set up air compressor
+        
+    //Set up air compressor and Solenoids
     Compressor airCompressor = new Compressor(1,1);
     Solenoid lift      = new Solenoid(1);
     Solenoid liftreset = new Solenoid(2);
@@ -101,6 +101,16 @@ public class Team1482Robot extends IterativeRobot {
             m_autoPeriodicLoops = 0; //resets loop counter on entering auto
             getWatchdog().setEnabled(false);
             getWatchdog().setExpiration(0.5);
+            
+            //Set up lift pistons
+            lift.set(false);
+            liftreset.set(true);
+            m_liftstate = 0;
+            //set up the garb pistons
+            grab.set(false);
+            grabreset.set(true);
+            m_grabstate = 0;
+
     }
     
     /**
@@ -119,11 +129,13 @@ public class Team1482Robot extends IterativeRobot {
             m_telePeriodicLoops = 0;
             m_teleContinuousLoops = 0; //resets loop counters on entering tele 
             getWatchdog().setEnabled(true);
+            getWatchdog().setExpiration(0.05);
             airCompressor.start(); //start compressor
-            //Set up solenoid
+            //Set up lift pistons
             lift.set(false);
             liftreset.set(true);
             m_liftstate = 0;
+            //set up the garb pistons
             grab.set(false);
             grabreset.set(true);
             m_grabstate = 0;
@@ -204,4 +216,6 @@ public class Team1482Robot extends IterativeRobot {
                     return null;
             }
     }
+    
+    
 }
