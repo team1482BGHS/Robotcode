@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.Talon;
  */
 public class Team1482Robot extends IterativeRobot {
 
-
     //initialize loop counters
     int m_disabledPeriodicLoops;
     int m_autoPeriodicLoops;
@@ -32,7 +31,6 @@ public class Team1482Robot extends IterativeRobot {
     int m_dsPacketsReceivedInCurrentSecond;
     
     int m_liftstate;
-    
     
     //Set up Talons to do whatever (uncomment as needed)
     Talon drive_left = new Talon(1);
@@ -83,7 +81,6 @@ public class Team1482Robot extends IterativeRobot {
     //Any code in this section will run once when the robot is turned on.
     public void robotInit() {
         System.out.println("RobotInit() completed. \n");
-
     }
 
     //************Disabled************
@@ -126,7 +123,7 @@ public class Team1482Robot extends IterativeRobot {
         m_teleContinuousLoops = 0; //resets loop counters on entering tele 
         getWatchdog().setEnabled(true);
         airCompressor.start(); //start compressor
-        //Set up solonide
+        //Set up solenoid
         lift.set(false);
         liftreset.set(true);
         m_liftstate = 0;
@@ -143,8 +140,9 @@ public class Team1482Robot extends IterativeRobot {
     public void teleopContinuous() {
         if (isEnabled()) {
             m_teleContinuousLoops++;
-            drive.arcadeDrive(drivestick);
-
+            double drivestick_x = drivestick.getRawAxis(1);
+            double drivestick_y = drivestick.getRawAxis(2); //Axis values assuming XBox 360 controller
+            drive.arcadeDrive(drivestick_y, drivestick_x);
 
             if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "held") {
                 System.out.println("Button 1 held");
@@ -165,7 +163,6 @@ public class Team1482Robot extends IterativeRobot {
                     m_liftstate = 0;
                 }
             }
-
             getWatchdog().feed();
             Timer.delay(0.005);
         } else {
@@ -180,18 +177,14 @@ public class Team1482Robot extends IterativeRobot {
         //Periodically feed the Watchdog
         getWatchdog().feed();
     }
-
     
     //************Functions************
     public String ButtonToggle(Joystick currStick, boolean[] buttonPreviouslyPressed, int buttonNum) {
-
-
         if (currStick.getRawButton(buttonNum)) {  //Is button pressed?
             if (!buttonPreviouslyPressed[buttonNum]) {   //Was this button pressed last cycle
                 //Set button to now pressed
                 buttonPreviouslyPressed[buttonNum] = true;
                 return "pressed";
-
             } else {
                 //Button is pressed and was also pressed last cycle
                 return "held";
@@ -200,7 +193,6 @@ public class Team1482Robot extends IterativeRobot {
         else {
             //button is not currentally pressed
             buttonPreviouslyPressed[buttonNum] = false;
-
             return null;
         }
     }
