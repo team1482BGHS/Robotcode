@@ -31,7 +31,7 @@ public class Team1482Robot extends IterativeRobot {
     int m_dsPacketsReceivedInCurrentSecond;
     
     int m_liftstate;
-    
+    int m_grabstate;
     //Set up Talons to do whatever (uncomment as needed)
     Talon drive_left = new Talon(1);
     Talon drive_right = new Talon(2);
@@ -61,7 +61,8 @@ public class Team1482Robot extends IterativeRobot {
     Solenoid liftreset = new Solenoid(2);
     Solenoid drop      = new Solenoid(3);
     Solenoid dropreset = new Solenoid(4);
-    
+    Solenoid grab      = new Solenoid(5);
+    Solenoid grabreset = new Solenoid(6); 
 
     public Team1482Robot() {
         System.out.println("BuiltinDefaultCode Constructor Started\n");
@@ -123,6 +124,10 @@ public class Team1482Robot extends IterativeRobot {
             lift.set(false);
             liftreset.set(true);
             m_liftstate = 0;
+            grab.set(false);
+            grabreset.set(true);
+            m_grabstate = 0;
+
     }
     
     /**
