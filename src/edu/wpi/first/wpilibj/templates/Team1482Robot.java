@@ -32,14 +32,21 @@ public class Team1482Robot extends IterativeRobot {
     int m_dsPacketsReceivedInCurrentSecond;
     
     int m_liftstate;
-    //Set up arcade drive
-    RobotDrive drive = new RobotDrive(1, 2);
+    
     
     //Set up Talons to do whatever (uncomment as needed)
+    Talon drive_left = new Talon(1);
+    Talon drive_right = new Talon(2);
     //Talon pwm3_motor = new Talon(3);
     //Talon pwm4_motor = new Talon(4);
     //Talon pwm5_motor = new Talon(5);
     //Talon pwm6_motor = new Talon(6);
+        
+    //Set up 2 motor drive
+    RobotDrive drive = new RobotDrive(drive_left, drive_right);
+	
+    //Set up 4 motor drive (uncomment as needed)
+    //RobotDrive drive = new Robotdrive(drive_left, drive_backleft, drive_right, drive_backright);
     
     //Set up joystick
     Joystick drivestick = new Joystick(1);
