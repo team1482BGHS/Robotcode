@@ -31,6 +31,7 @@ public class Team1482Robot extends IterativeRobot {
 
     int m_dsPacketsReceivedInCurrentSecond;
     
+    int m_liftstate;
     //Set up arcade drive
     RobotDrive drive = new RobotDrive(1, 2);
     
@@ -117,8 +118,11 @@ public class Team1482Robot extends IterativeRobot {
         m_telePeriodicLoops = 0;
         m_teleContinuousLoops = 0; //resets loop counters on entering tele 
         getWatchdog().setEnabled(true);
-        airCompressor.start();
-        //Retract all solenoids
+        airCompressor.start(); //start compressor
+        //Set up solonide
+        lift.set(false);
+        liftreset.set(true);
+        m_liftstate = 0;
     }
 	/**
 	* This function is called periodically during teleop
@@ -139,6 +143,20 @@ public class Team1482Robot extends IterativeRobot {
                 System.out.println("Button 1 held");
             } else if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed") {
                 System.out.println("Button 1 just pressed");
+                //When pressed
+                
+                //If retracted extend
+                if(m_liftstate == 0){
+                    lift.set(true);
+                    liftreset.set(false);
+                    m_liftstate = 1;
+                }
+                //If is not retracted retract
+                else{
+                    lift.set(false);
+                    liftreset.set(true);
+                    m_liftstate = 0;
+                }
             }
 
             getWatchdog().feed();
