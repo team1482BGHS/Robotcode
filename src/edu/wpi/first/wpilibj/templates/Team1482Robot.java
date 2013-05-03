@@ -81,115 +81,122 @@ public class Team1482Robot extends IterativeRobot {
 
     //************Disabled************
     public void disabledInit() {
-    	System.out.println("Robot disabled");
-        m_disabledPeriodicLoops = 0; //resets loop counter on disabling
+            System.out.println("Robot disabled");
+            m_disabledPeriodicLoops = 0; //resets loop counter on disabling
 
     }
     public void disabledPeriodic() {
-    	m_disabledPeriodicLoops++;
-        Timer.delay(0.002);
-        getWatchdog().feed();
+            m_disabledPeriodicLoops++;
+            Timer.delay(0.002);
+            getWatchdog().feed();
     }
     
-	//************Autonomous************
-	/**
-	* This function is called once when entering autonomous
-	*/
+    //************Autonomous************
+    /**
+     * This function is called once when entering autonomous
+     */
     public void autonomousInit() {
-    	System.out.println("Autonomous started");
-        m_autoPeriodicLoops = 0; //resets loop counter on entering auto
-        getWatchdog().setEnabled(false);
-        getWatchdog().setExpiration(0.5);
+            System.out.println("Autonomous started");
+            m_autoPeriodicLoops = 0; //resets loop counter on entering auto
+            getWatchdog().setEnabled(false);
+            getWatchdog().setExpiration(0.5);
     }
-
+    
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-	// insert code here
+            // insert code here
     }
 
     //************Teleop************
-	/**
-	* This function is called once when entering teleop
-	*/
+    /**
+     * This function is called once when entering teleop
+     */
     public void teleopInit() {
-    	System.out.println("Starting Teleop");
-        m_telePeriodicLoops = 0;
-        m_teleContinuousLoops = 0; //resets loop counters on entering tele 
-        getWatchdog().setEnabled(true);
-        airCompressor.start(); //start compressor
-        //Set up solenoid
-        lift.set(false);
-        liftreset.set(true);
-        m_liftstate = 0;
+            System.out.println("Starting Teleop");
+            m_telePeriodicLoops = 0;
+            m_teleContinuousLoops = 0; //resets loop counters on entering tele 
+            getWatchdog().setEnabled(true);
+            airCompressor.start(); //start compressor
+            //Set up solenoid
+            lift.set(false);
+            liftreset.set(true);
+            m_liftstate = 0;
     }
-	/**
-	* This function is called periodically during teleop
-	*/
+    
+    /**
+     * This function is called periodically during teleop
+     */
     public void teleopPeriodic() {
-    	m_telePeriodicLoops++;
+            m_telePeriodicLoops++;
     }
-	/**
-	* This function runs continuously during teleop
-	*/
+    
+    /**
+     * This function runs continuously during teleop
+     */
     public void teleopContinuous() {
-        if (isEnabled()) {
-            m_teleContinuousLoops++;
-            double drivestick_x = drivestick.getRawAxis(1);
-            double drivestick_y = drivestick.getRawAxis(2); //Axis values assuming XBox 360 controller
-            drive.arcadeDrive(drivestick_y, drivestick_x);
+            if (isEnabled()) {
+                    m_teleContinuousLoops++;
+                    double drivestick_x = drivestick.getRawAxis(1);
+                    double drivestick_y = drivestick.getRawAxis(2); //Axis values assuming XBox 360 controller
+                    drive.arcadeDrive(drivestick_y, drivestick_x);
+                    //Check button values (uncomment as needed)
+                    //boolean drivestick_1 = drivestick.getRawButton(1);
+                    //boolean drivestick_2 = drivestick.getRawButton(2);
+                    //boolean drivestick_3 = drivestick.getRawButton(3);
+                    //boolean drivestick_4 = drivestick.getRawButton(4); //etc etc
+                    
+                    if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "held") {
+                            System.out.println("Button 1 held");
+                    } else if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed") {
+                            System.out.println("Button 1 just pressed");
+                            //When pressed
 
-            if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "held") {
-                System.out.println("Button 1 held");
-            } else if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed") {
-                System.out.println("Button 1 just pressed");
-                //When pressed
-                
-                //If retracted extend
-                if(m_liftstate == 0){
-                    lift.set(true);
-                    liftreset.set(false);
-                    m_liftstate = 1;
-                }
-                //If is not retracted retract
-                else{
-                    lift.set(false);
-                    liftreset.set(true);
-                    m_liftstate = 0;
-                }
+                            //If retracted extend
+                            if(m_liftstate == 0){
+                                    lift.set(true);
+                                    liftreset.set(false);
+                                    m_liftstate = 1;
+                            }
+                            //If is not retracted retract
+                            else{
+                                    lift.set(false);
+                                    liftreset.set(true);
+                                    m_liftstate = 0;
+                            }
+                    }
+                    getWatchdog().feed();
+                    Timer.delay(0.005);
+            } else {
+                    Timer.delay(0.01);
+                    getWatchdog().feed();
             }
-            getWatchdog().feed();
-            Timer.delay(0.005);
-        } else {
-            Timer.delay(0.01);
-            getWatchdog().feed();
-        }
     }
-
+    
     //************Test Mode************
     public void testPeriodic() {
-    	System.out.println("Starting Test Mode");
-        //Periodically feed the Watchdog
-        getWatchdog().feed();
+            System.out.println("Starting Test Mode");
+            //Periodically feed the Watchdog
+            getWatchdog().feed();
     }
     
     //************Functions************
     public String ButtonToggle(Joystick currStick, boolean[] buttonPreviouslyPressed, int buttonNum) {
-        if (currStick.getRawButton(buttonNum)) {  //Is button pressed?
-            if (!buttonPreviouslyPressed[buttonNum]) {   //Was this button pressed last cycle
-                //Set button to now pressed
-                buttonPreviouslyPressed[buttonNum] = true;
-                return "pressed";
-            } else {
-                //Button is pressed and was also pressed last cycle
-                return "held";
+            if (currStick.getRawButton(buttonNum)) {  //Is button pressed?
+                    if (!buttonPreviouslyPressed[buttonNum]) {   //Was this button pressed last cycle
+                            //Set button to now pressed
+                            buttonPreviouslyPressed[buttonNum] = true;
+                            return "pressed";
+                    } else {
+                            //Button is pressed and was also pressed last cycle
+                            return "held";
+                    }
+            } //Button not pressed at all
+            else {
+                    //button is not currentally pressed
+                    buttonPreviouslyPressed[buttonNum] = false;
+                    return null;
             }
-        } //Button not pressed at all
-        else {
-            //button is not currentally pressed
-            buttonPreviouslyPressed[buttonNum] = false;
-            return null;
-        }
     }
 }
