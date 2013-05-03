@@ -52,10 +52,7 @@ public class Team1482Robot extends IterativeRobot {
     public static int NUM_JOYSTICK_BUTTONS = 16;
     
     //Phase next two out
-    boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
-    boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
-    
-    //Integrate
+    boolean[] m_driveStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_shootStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];    
         
     //Set up air compressor
@@ -72,8 +69,7 @@ public class Team1482Robot extends IterativeRobot {
         
         int buttonNum = 1;
         for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
-            m_rightStickButtonState[buttonNum] = false;
-            m_leftStickButtonState[buttonNum] = false;
+            m_driveStickButtonState[buttonNum] = false;
             m_shootStickButtonState[buttonNum] = false;
         }        
     }
