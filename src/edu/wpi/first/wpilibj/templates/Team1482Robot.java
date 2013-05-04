@@ -13,6 +13,16 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Talon;
+
+//Camera shit
+import edu.wpi.first.wpilibj.camera.AxisCamera;
+import edu.wpi.first.wpilibj.image.BinaryImage;
+import edu.wpi.first.wpilibj.image.ColorImage;
+import edu.wpi.first.wpilibj.image.CriteriaCollection;
+import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
+import edu.wpi.first.wpilibj.image.NIVisionException;
+import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
+import edu.wpi.first.wpilibj.image.RGBImage;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -32,6 +42,7 @@ public class Team1482Robot extends IterativeRobot {
     
     int m_liftstate;
     int m_grabstate;
+    
     //Set up Talons to do whatever (uncomment as needed)
     Talon drive_left = new Talon(1);
     Talon drive_right = new Talon(2);
@@ -50,7 +61,7 @@ public class Team1482Robot extends IterativeRobot {
     Joystick drivestick = new Joystick(1);
     Joystick shootstick = new Joystick(2);
     public static int NUM_JOYSTICK_BUTTONS = 16;
-    //Declair joystick buttons
+    //Declare  joystick buttons
     boolean[] m_driveStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_shootStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];    
         
@@ -63,10 +74,13 @@ public class Team1482Robot extends IterativeRobot {
     Solenoid dropreset = new Solenoid(4);
     Solenoid grab      = new Solenoid(5);
     Solenoid grabreset = new Solenoid(6); 
+    
+    //Set up camera
+    AxisCamera camera;
+    CriteriaCollection cc;
 
     public Team1482Robot() {
         System.out.println("BuiltinDefaultCode Constructor Started\n");
-        
         
         int buttonNum = 1;
         for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
@@ -74,10 +88,15 @@ public class Team1482Robot extends IterativeRobot {
             m_shootStickButtonState[buttonNum] = false;
         }        
     }
+    
     //************Initalize************
     //Any code in this section will run once when the robot is turned on.
     public void robotInit() {
-        System.out.println("RobotInit() completed. \n");
+            camera = AxisCamera.getInstance();
+            cc = new CriteriaCollection();
+            cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 0, false);
+            cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 0, false); //todo: check WPILibJ documentation
+            System.out.println("RobotInit() completed. \n");
     }
 
     //************Disabled************
@@ -110,7 +129,6 @@ public class Team1482Robot extends IterativeRobot {
             grab.set(false);
             grabreset.set(true);
             m_grabstate = 0;
-
     }
     
     /**
