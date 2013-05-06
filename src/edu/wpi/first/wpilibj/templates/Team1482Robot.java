@@ -165,6 +165,7 @@ public class Team1482Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
             m_telePeriodicLoops++;
+            SmartDashboard.putBoolean("Grab state", m_grabstate);
     }
     
     /**
