@@ -97,6 +97,8 @@ public class Team1482Robot extends IterativeRobot {
             cc = new CriteriaCollection();
             cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 0, false);
             cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 0, false); //todo: check WPILibJ documentation
+            SmartDashboard.putBoolean("Grab state", false);
+            SmartDashboard.putBoolean("Lift state", false);
             System.out.println("RobotInit() completed. \n");
     }
 
@@ -167,6 +169,7 @@ public class Team1482Robot extends IterativeRobot {
     public void teleopPeriodic() {
             m_telePeriodicLoops++;
             SmartDashboard.putBoolean("Grab state", m_grabstate);
+            SmartDashboard.putBoolean("Lift state", m_liftstate);
     }
     
     /**
