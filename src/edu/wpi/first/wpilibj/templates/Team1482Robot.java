@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 import edu.wpi.first.wpilibj.image.RGBImage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -40,8 +41,8 @@ public class Team1482Robot extends IterativeRobot {
 
     int m_dsPacketsReceivedInCurrentSecond;
     
-    int m_liftstate;
-    int m_grabstate;
+    boolean m_liftstate;
+    boolean m_grabstate;
     
     //Set up Talons to do whatever (uncomment as needed)
     Talon drive_left = new Talon(1);
@@ -124,11 +125,11 @@ public class Team1482Robot extends IterativeRobot {
             //Set up lift pistons
             lift.set(false);
             liftreset.set(true);
-            m_liftstate = 0;
+            m_liftstate = false;
             //set up the garb pistons
             grab.set(false);
             grabreset.set(true);
-            m_grabstate = 0;
+            m_grabstate = false;
     }
     
     /**
@@ -152,11 +153,11 @@ public class Team1482Robot extends IterativeRobot {
             //Set up lift pistons
             lift.set(false);
             liftreset.set(true);
-            m_liftstate = 0;
+            m_liftstate = false;
             //set up the garb pistons
             grab.set(false);
             grabreset.set(true);
-            m_grabstate = 0;
+            m_grabstate = true;
 
     }
     
@@ -190,16 +191,16 @@ public class Team1482Robot extends IterativeRobot {
                             //When pressed
 
                             //If retracted extend
-                            if(m_liftstate == 0){
+                            if(m_liftstate == false){
                                     lift.set(true);
                                     liftreset.set(false);
-                                    m_liftstate = 1;
+                                    m_liftstate = true;
                             }
                             //If is not retracted retract
                             else{
                                     lift.set(false);
                                     liftreset.set(true);
-                                    m_liftstate = 0;
+                                    m_liftstate = false;
                             }
                     }
                     getWatchdog().feed();
