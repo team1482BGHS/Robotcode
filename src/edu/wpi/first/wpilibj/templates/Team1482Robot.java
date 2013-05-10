@@ -62,10 +62,12 @@ public class Team1482Robot extends IterativeRobot {
     Joystick drivestick = new Joystick(1);
     Joystick shootstick = new Joystick(2);
     public static int NUM_JOYSTICK_BUTTONS = 16;
+    
     //Declare  joystick buttons
     boolean[] m_driveStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_shootStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];    
-        
+    
+    String m_button_1;
         
     //Set up air compressor and Solenoids
     Compressor airCompressor = new Compressor(1,1);
@@ -170,6 +172,8 @@ public class Team1482Robot extends IterativeRobot {
             m_telePeriodicLoops++;
             SmartDashboard.putBoolean("Grab state", m_grabstate);
             SmartDashboard.putBoolean("Lift state", m_liftstate);
+            SmartDashboard.putNumber("Teleop loops Continous", m_teleContinuousLoops);
+            SmartDashboard.putNumber("Teleop loops perodic", m_autoPeriodicLoops);
     }
     
     /**
@@ -186,10 +190,11 @@ public class Team1482Robot extends IterativeRobot {
                     //boolean drivestick_2 = drivestick.getRawButton(2);
                     //boolean drivestick_3 = drivestick.getRawButton(3);
                     //boolean drivestick_4 = drivestick.getRawButton(4); //etc etc
+                    m_button_1 = ButtonToggle(shootstick, m_shootStickButtonState, 1);
                     
-                    if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "held") {
+                    if (m_button_1 == "held") {
                             System.out.println("Button 1 held");
-                    } else if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed") {
+                    } else if (m_button_1 == "pressed") {
                             System.out.println("Button 1 just pressed");
                             //When pressed
 
@@ -224,18 +229,18 @@ public class Team1482Robot extends IterativeRobot {
     //************Functions************
     public String ButtonToggle(Joystick currStick, boolean[] buttonPreviouslyPressed, int buttonNum) {
             if (currStick.getRawButton(buttonNum)) {  //Is button pressed?
-                    if (!buttonPreviouslyPressed[buttonNum]) {   //Was this button pressed last cycle
-                            //Set button to now pressed
-                            buttonPreviouslyPressed[buttonNum] = true;
-                            return "pressed";
-                    } else {
-                            //Button is pressed and was also pressed last cycle
-                            return "held";
-                    }
+                    if (m_shootStickButtonState[buttonNum]) {
+                        //Button is pressed and was also pressed last cycle
+                        return "held";
+                } else {   //Was this button pressed last cycle
+                        //Set button to now pressed
+                        m_shootStickButtonState[buttonNum] = true;
+                        return "pressed";
+                }
             } //Button not pressed at all
             else {
                     //button is not currentally pressed
-                    buttonPreviouslyPressed[buttonNum] = false;
+                    m_shootStickButtonState[buttonNum] = false;
                     return null;
             }
     }
