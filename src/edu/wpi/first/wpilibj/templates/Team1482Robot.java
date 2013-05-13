@@ -186,10 +186,7 @@ public class Team1482Robot extends IterativeRobot {
                     //boolean drivestick_2 = drivestick.getRawButton(2);
                     //boolean drivestick_3 = drivestick.getRawButton(3);
                     //boolean drivestick_4 = drivestick.getRawButton(4); //etc etc
-                    
-                    if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "held") {
-                            System.out.println("Button 1 held");
-                    } else if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed") {
+                    if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed") {
                             System.out.println("Button 1 just pressed");
                             //When pressed
 
