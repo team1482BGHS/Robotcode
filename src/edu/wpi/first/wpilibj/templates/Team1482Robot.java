@@ -43,6 +43,7 @@ public class Team1482Robot extends IterativeRobot {
     
     boolean m_liftstate;
     boolean m_grabstate;
+    boolean m_anglestate;
     
     //Set up Talons to do whatever (uncomment as needed)
     Talon drive_left = new Talon(1);
@@ -71,12 +72,14 @@ public class Team1482Robot extends IterativeRobot {
         
     //Set up air compressor and Solenoids
     Compressor airCompressor = new Compressor(1,1);
-    Solenoid lift      = new Solenoid(1);
-    Solenoid liftreset = new Solenoid(2);
-    Solenoid drop      = new Solenoid(3);
-    Solenoid dropreset = new Solenoid(4);
-    Solenoid grab      = new Solenoid(5);
-    Solenoid grabreset = new Solenoid(6); 
+    Solenoid lift       = new Solenoid(1);
+    Solenoid liftreset  = new Solenoid(2);
+    Solenoid drop       = new Solenoid(3);
+    Solenoid dropreset  = new Solenoid(4);
+    Solenoid grab       = new Solenoid(5);
+    Solenoid grabreset  = new Solenoid(6); 
+    Solenoid angle      = new Solenoid(7);
+    Solenoid anglereset = new Solenoid(7);
     
     //Set up camera
     AxisCamera camera;
@@ -134,6 +137,10 @@ public class Team1482Robot extends IterativeRobot {
             grab.set(false);
             grabreset.set(true);
             m_grabstate = false;
+            //set the angle piston
+            angle.set(false);
+            anglereset.set(true);
+            m_anglestate = false;
     }
     
     /**
@@ -162,7 +169,10 @@ public class Team1482Robot extends IterativeRobot {
             grab.set(false);
             grabreset.set(true);
             m_grabstate = true;
-
+            //set the angle piston
+            angle.set(false);
+            anglereset.set(true);
+            m_anglestate = false;
     }
     
     /**
@@ -172,6 +182,7 @@ public class Team1482Robot extends IterativeRobot {
             m_telePeriodicLoops++;
             SmartDashboard.putBoolean("Grab state", m_grabstate);
             SmartDashboard.putBoolean("Lift state", m_liftstate);
+            SmartDashboard.putBoolean("Angle State", m_anglestate);
             SmartDashboard.putNumber("Teleop loops Continous", m_teleContinuousLoops);
             SmartDashboard.putNumber("Teleop loops perodic", m_autoPeriodicLoops);
     }
@@ -180,43 +191,40 @@ public class Team1482Robot extends IterativeRobot {
      * This function runs continuously during teleop
      */
     public void teleopContinuous() {
-            if (isEnabled()) {
-                    m_teleContinuousLoops++;
-                    double drivestick_x = drivestick.getRawAxis(1);
-                    double drivestick_y = drivestick.getRawAxis(2); //Axis values assuming XBox 360 controller
-                    drive.arcadeDrive(drivestick_y, drivestick_x);
-                    //Check button values (uncomment as needed)
-                    //boolean drivestick_1 = drivestick.getRawButton(1);
-                    //boolean drivestick_2 = drivestick.getRawButton(2);
-                    //boolean drivestick_3 = drivestick.getRawButton(3);
-                    //boolean drivestick_4 = drivestick.getRawButton(4); //etc etc
-                    m_button_1 = ButtonToggle(shootstick, m_shootStickButtonState, 1);
-                    
-                    if (m_button_1 == "held") {
-                            System.out.println("Button 1 held");
-                    } else if (m_button_1 == "pressed") {
-                            System.out.println("Button 1 just pressed");
-                            //When pressed
+        if (isEnabled()) {
+            m_teleContinuousLoops++;
+            double drivestick_x = drivestick.getRawAxis(1);
+            double drivestick_y = drivestick.getRawAxis(2); //Axis values assuming XBox 360 controller
+            drive.arcadeDrive(drivestick_y, drivestick_x);
+            //Check button values (uncomment as needed)
+            //boolean drivestick_1 = drivestick.getRawButton(1);
+            //boolean drivestick_2 = drivestick.getRawButton(2);
+            //boolean drivestick_3 = drivestick.getRawButton(3);
+            //boolean drivestick_4 = drivestick.getRawButton(4); //etc etc
+            m_button_1 = ButtonToggle(shootstick, m_shootStickButtonState, 1);
 
-                            //If retracted extend
-                            if(m_liftstate == false){
-                                    lift.set(true);
-                                    liftreset.set(false);
-                                    m_liftstate = true;
-                            }
-                            //If is not retracted retract
-                            else{
-                                    lift.set(false);
-                                    liftreset.set(true);
-                                    m_liftstate = false;
-                            }
-                    }
-                    getWatchdog().feed();
-                    Timer.delay(0.005);
-            } else {
-                    Timer.delay(0.01);
-                    getWatchdog().feed();
+            if (m_button_1 == "pressed") {
+                System.out.println("Button 1 just pressed");
+                //When pressed
+
+                //If retracted extend
+                if (m_liftstate == false) {
+                    lift.set(true);
+                    liftreset.set(false);
+                    m_liftstate = true;
+                } //If is not retracted retract
+                else {
+                    lift.set(false);
+                    liftreset.set(true);
+                    m_liftstate = false;
+                }
             }
+            getWatchdog().feed();
+            Timer.delay(0.005);
+        } else {
+            Timer.delay(0.01);
+            getWatchdog().feed();
+        }
     }
     
     //************Test Mode************
