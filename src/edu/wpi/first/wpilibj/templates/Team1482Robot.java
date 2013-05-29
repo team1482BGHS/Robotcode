@@ -43,6 +43,7 @@ public class Team1482Robot extends IterativeRobot {
     
     boolean m_liftstate;
     boolean m_grabstate;
+    boolean m_anglestate;
     
     //Set up Talons to do whatever (uncomment as needed)
     Talon drive_left = new Talon(1);
@@ -62,19 +63,23 @@ public class Team1482Robot extends IterativeRobot {
     Joystick drivestick = new Joystick(1);
     Joystick shootstick = new Joystick(2);
     public static int NUM_JOYSTICK_BUTTONS = 16;
+    
     //Declare  joystick buttons
     boolean[] m_driveStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_shootStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];    
-        
+    
+    String m_button_1;
         
     //Set up air compressor and Solenoids
     Compressor airCompressor = new Compressor(1,1);
-    Solenoid lift      = new Solenoid(1);
-    Solenoid liftreset = new Solenoid(2);
-    Solenoid drop      = new Solenoid(3);
-    Solenoid dropreset = new Solenoid(4);
-    Solenoid grab      = new Solenoid(5);
-    Solenoid grabreset = new Solenoid(6); 
+    Solenoid lift       = new Solenoid(1);
+    Solenoid liftreset  = new Solenoid(2);
+    Solenoid drop       = new Solenoid(3);
+    Solenoid dropreset  = new Solenoid(4);
+    Solenoid grab       = new Solenoid(5);
+    Solenoid grabreset  = new Solenoid(6); 
+    Solenoid angle      = new Solenoid(7);
+    Solenoid anglereset = new Solenoid(7);
     
     //Set up camera
     AxisCamera camera;
@@ -132,6 +137,10 @@ public class Team1482Robot extends IterativeRobot {
             grab.set(false);
             grabreset.set(true);
             m_grabstate = false;
+            //set the angle piston
+            angle.set(false);
+            anglereset.set(true);
+            m_anglestate = false;
     }
     
     /**
@@ -160,7 +169,10 @@ public class Team1482Robot extends IterativeRobot {
             grab.set(false);
             grabreset.set(true);
             m_grabstate = true;
-
+            //set the angle piston
+            angle.set(false);
+            anglereset.set(true);
+            m_anglestate = false;
     }
     
     /**
@@ -170,45 +182,49 @@ public class Team1482Robot extends IterativeRobot {
             m_telePeriodicLoops++;
             SmartDashboard.putBoolean("Grab state", m_grabstate);
             SmartDashboard.putBoolean("Lift state", m_liftstate);
+            SmartDashboard.putBoolean("Angle State", m_anglestate);
+            SmartDashboard.putNumber("Teleop loops Continous", m_teleContinuousLoops);
+            SmartDashboard.putNumber("Teleop loops perodic", m_autoPeriodicLoops);
     }
     
     /**
      * This function runs continuously during teleop
      */
     public void teleopContinuous() {
-            if (isEnabled()) {
-                    m_teleContinuousLoops++;
-                    double drivestick_x = drivestick.getRawAxis(1);
-                    double drivestick_y = drivestick.getRawAxis(2); //Axis values assuming XBox 360 controller
-                    drive.arcadeDrive(drivestick_y, drivestick_x);
-                    //Check button values (uncomment as needed)
-                    //boolean drivestick_1 = drivestick.getRawButton(1);
-                    //boolean drivestick_2 = drivestick.getRawButton(2);
-                    //boolean drivestick_3 = drivestick.getRawButton(3);
-                    //boolean drivestick_4 = drivestick.getRawButton(4); //etc etc
-                    if (ButtonToggle(shootstick, m_shootStickButtonState, 1) == "pressed") {
-                            System.out.println("Button 1 just pressed");
-                            //When pressed
+        if (isEnabled()) {
+            m_teleContinuousLoops++;
+            double drivestick_x = drivestick.getRawAxis(1);
+            double drivestick_y = drivestick.getRawAxis(2); //Axis values assuming XBox 360 controller
+            drive.arcadeDrive(drivestick_y, drivestick_x);
+            //Check button values (uncomment as needed)
+            //boolean drivestick_1 = drivestick.getRawButton(1);
+            //boolean drivestick_2 = drivestick.getRawButton(2);
+            //boolean drivestick_3 = drivestick.getRawButton(3);
+            //boolean drivestick_4 = drivestick.getRawButton(4); //etc etc
+            m_button_1 = ButtonToggle(shootstick, m_shootStickButtonState, 1);
 
-                            //If retracted extend
-                            if(m_liftstate == false){
-                                    lift.set(true);
-                                    liftreset.set(false);
-                                    m_liftstate = true;
-                            }
-                            //If is not retracted retract
-                            else{
-                                    lift.set(false);
-                                    liftreset.set(true);
-                                    m_liftstate = false;
-                            }
-                    }
-                    getWatchdog().feed();
-                    Timer.delay(0.005);
-            } else {
-                    Timer.delay(0.01);
-                    getWatchdog().feed();
+            if (m_button_1 == "pressed") {
+                System.out.println("Button 1 just pressed");
+                //When pressed
+
+                //If retracted extend
+                if (m_liftstate == false) {
+                    lift.set(true);
+                    liftreset.set(false);
+                    m_liftstate = true;
+                } //If is not retracted retract
+                else {
+                    lift.set(false);
+                    liftreset.set(true);
+                    m_liftstate = false;
+                }
             }
+            getWatchdog().feed();
+            Timer.delay(0.005);
+        } else {
+            Timer.delay(0.01);
+            getWatchdog().feed();
+        }
     }
     
     //************Test Mode************
@@ -221,18 +237,18 @@ public class Team1482Robot extends IterativeRobot {
     //************Functions************
     public String ButtonToggle(Joystick currStick, boolean[] buttonPreviouslyPressed, int buttonNum) {
             if (currStick.getRawButton(buttonNum)) {  //Is button pressed?
-                    if (!buttonPreviouslyPressed[buttonNum]) {   //Was this button pressed last cycle
-                            //Set button to now pressed
-                            buttonPreviouslyPressed[buttonNum] = true;
-                            return "pressed";
-                    } else {
-                            //Button is pressed and was also pressed last cycle
-                            return "held";
-                    }
+                    if (m_shootStickButtonState[buttonNum]) {
+                        //Button is pressed and was also pressed last cycle
+                        return "held";
+                } else {   //Was this button pressed last cycle
+                        //Set button to now pressed
+                        m_shootStickButtonState[buttonNum] = true;
+                        return "pressed";
+                }
             } //Button not pressed at all
             else {
                     //button is not currentally pressed
-                    buttonPreviouslyPressed[buttonNum] = false;
+                    m_shootStickButtonState[buttonNum] = false;
                     return null;
             }
     }
