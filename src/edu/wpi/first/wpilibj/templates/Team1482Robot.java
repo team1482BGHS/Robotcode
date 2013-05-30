@@ -37,7 +37,7 @@ public class Team1482Robot extends IterativeRobot {
     int m_disabledPeriodicLoops;
     int m_autoPeriodicLoops;
     int m_telePeriodicLoops;
-    int m_teleContinuousLoops;
+    int m_teleEnabledLoops;
 
     int m_dsPacketsReceivedInCurrentSecond;
     
@@ -157,7 +157,7 @@ public class Team1482Robot extends IterativeRobot {
     public void teleopInit() {
             System.out.println("Starting Teleop");
             m_telePeriodicLoops = 0;
-            m_teleContinuousLoops = 0; //resets loop counters on entering tele 
+            m_teleEnabledLoops = 0; //resets loop counters on entering tele 
             getWatchdog().setEnabled(true);
             getWatchdog().setExpiration(0.05);
             airCompressor.start(); //start compressor
@@ -175,31 +175,24 @@ public class Team1482Robot extends IterativeRobot {
             m_anglestate = false;
     }
     
-    /**
-     * This function is called periodically during teleop
-     */
-    public void teleopContinuous() {
-            m_telePeriodicLoops++;
-            SmartDashboard.putBoolean("Grab state", m_grabstate);
-            SmartDashboard.putBoolean("Lift state", m_liftstate);
-            SmartDashboard.putBoolean("Angle State", m_anglestate);
-            SmartDashboard.putNumber("Teleop loops Continous", m_teleContinuousLoops);
-            SmartDashboard.putNumber("Teleop loops perodic", m_autoPeriodicLoops);
-    }
     
     /**
      * This function runs continuously during teleop
      */
     public void teleopPeriodic() {
+        //Count loops
+        m_telePeriodicLoops++;
         
-            m_telePeriodicLoops++;
-            SmartDashboard.putBoolean("Grab state", m_grabstate);
-            SmartDashboard.putBoolean("Lift state", m_liftstate);
-            SmartDashboard.putBoolean("Angle State", m_anglestate);
-            SmartDashboard.putNumber("Teleop loops Continous", m_teleContinuousLoops);
-            SmartDashboard.putNumber("Teleop loops perodic", m_autoPeriodicLoops);
+        //Put variables to dashboard
+        SmartDashboard.putBoolean("Grab state", m_grabstate);
+        SmartDashboard.putBoolean("Lift state", m_liftstate);
+        SmartDashboard.putBoolean("Angle State", m_anglestate);
+        SmartDashboard.putNumber("Teleop loops Continous", m_teleEnabledLoops);
+        SmartDashboard.putNumber("Teleop loops perodic", m_autoPeriodicLoops);
+        
+        //Run when robot is enabled
         if (isEnabled()) {
-            m_teleContinuousLoops++;
+            m_teleEnabledLoops++;
             double drivestick_x = drivestick.getRawAxis(1);
             double drivestick_y = drivestick.getRawAxis(2); //Axis values assuming XBox 360 controller
             drive.arcadeDrive(drivestick_y, drivestick_x);
@@ -208,24 +201,27 @@ public class Team1482Robot extends IterativeRobot {
             //boolean drivestick_2 = drivestick.getRawButton(2);
             //boolean drivestick_3 = drivestick.getRawButton(3);
             //boolean drivestick_4 = drivestick.getRawButton(4); //etc etc
+            
+            //Script for looking to see if it is the first press of a button
             m_button_1 = ButtonToggle(shootstick, m_shootStickButtonState, 1);
 
             if (m_button_1 == "pressed") {
                 System.out.println("Button 1 just pressed");
                 //When pressed
 
-                //If retracted extend
+                //If retracted, extend
                 if (m_liftstate == false) {
                     lift.set(true);
                     liftreset.set(false);
                     m_liftstate = true;
-                } //If is not retracted retract
+                } //If iextended, retract
                 else {
                     lift.set(false);
                     liftreset.set(true);
                     m_liftstate = false;
                 }
             }
+            //Feed watchdog
             getWatchdog().feed();
             Timer.delay(0.005);
         } else {
@@ -236,7 +232,7 @@ public class Team1482Robot extends IterativeRobot {
     
     //************Test Mode************
     public void testPeriodic() {
-            System.out.println("Starting Test Mode");
+            System.out.println("Test Mode");
             //Periodically feed the Watchdog
             getWatchdog().feed();
     }
