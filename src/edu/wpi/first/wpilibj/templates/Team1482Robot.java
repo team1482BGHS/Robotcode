@@ -244,6 +244,7 @@ public class Team1482Robot extends IterativeRobot {
                         cyclecount = 0;
                         
                 }
+            cyclecount++;
             }
             
             //Feed watchdog
