@@ -79,11 +79,11 @@ public class Team1482Robot extends IterativeRobot {
     Solenoid grab       = new Solenoid(5);
     Solenoid grabreset  = new Solenoid(6); 
     Solenoid angle      = new Solenoid(7);
-    Solenoid anglereset = new Solenoid(7);
+    Solenoid anglereset = new Solenoid(8);
     
     //Set up camera
-    AxisCamera camera;
-    CriteriaCollection cc;
+    //AxisCamera camera;
+    //CriteriaCollection cc;
 
     public Team1482Robot() {
         System.out.println("BuiltinDefaultCode Constructor Started\n");
@@ -98,10 +98,10 @@ public class Team1482Robot extends IterativeRobot {
     //************Initalize************
     //Any code in this section will run once when the robot is turned on.
     public void robotInit() {
-            camera = AxisCamera.getInstance();
-            cc = new CriteriaCollection();
-            cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 0, false);
-            cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 0, false); //todo: check WPILibJ documentation
+            //camera = AxisCamera.getInstance();
+            //cc = new CriteriaCollection();
+            //cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 0, false);
+            //cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 0, false); //todo: check WPILibJ documentation
             SmartDashboard.putBoolean("Grab state", false);
             SmartDashboard.putBoolean("Lift state", false);
             System.out.println("RobotInit() completed. \n");
@@ -178,7 +178,7 @@ public class Team1482Robot extends IterativeRobot {
     /**
      * This function is called periodically during teleop
      */
-    public void teleopPeriodic() {
+    public void teleopContinuous() {
             m_telePeriodicLoops++;
             SmartDashboard.putBoolean("Grab state", m_grabstate);
             SmartDashboard.putBoolean("Lift state", m_liftstate);
@@ -190,7 +190,14 @@ public class Team1482Robot extends IterativeRobot {
     /**
      * This function runs continuously during teleop
      */
-    public void teleopContinuous() {
+    public void teleopPeriodic() {
+        
+            m_telePeriodicLoops++;
+            SmartDashboard.putBoolean("Grab state", m_grabstate);
+            SmartDashboard.putBoolean("Lift state", m_liftstate);
+            SmartDashboard.putBoolean("Angle State", m_anglestate);
+            SmartDashboard.putNumber("Teleop loops Continous", m_teleContinuousLoops);
+            SmartDashboard.putNumber("Teleop loops perodic", m_autoPeriodicLoops);
         if (isEnabled()) {
             m_teleContinuousLoops++;
             double drivestick_x = drivestick.getRawAxis(1);
