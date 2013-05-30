@@ -69,6 +69,9 @@ public class Team1482Robot extends IterativeRobot {
     boolean[] m_shootStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];    
     
     String m_button_1;
+    String m_button_2;
+    
+    int cyclecount;
         
     //Set up air compressor and Solenoids
     Compressor airCompressor = new Compressor(1,1);
@@ -204,7 +207,7 @@ public class Team1482Robot extends IterativeRobot {
             
             //Script for looking to see if it is the first press of a button
             m_button_1 = ButtonToggle(shootstick, m_shootStickButtonState, 1);
-
+            m_button_2 = ButtonToggle(shootstick, m_shootStickButtonState, 2);
             if (m_button_1 == "pressed") {
                 System.out.println("Button 1 just pressed");
                 //When pressed
@@ -221,6 +224,28 @@ public class Team1482Robot extends IterativeRobot {
                     m_liftstate = false;
                 }
             }
+            
+            //***Cycle code**//
+            
+            if (m_button_2 == "pressed"){
+                cyclecount = 0;
+            }
+            else if (m_button_2 == "held"){
+                switch (cyclecount) {
+                    case 0 :
+                        angle.set(false);
+                        anglereset.set(true);
+                        break;
+                    case 200 :
+                        angle.set(true);
+                        anglereset.set(false);
+                        break;
+                    case 400 :
+                        cyclecount = 0;
+                        
+                }
+            }
+            
             //Feed watchdog
             getWatchdog().feed();
             Timer.delay(0.005);
