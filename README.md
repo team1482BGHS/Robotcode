@@ -1,21 +1,15 @@
 Robotcode
 =========
-This code was starting to be devoloped in the 2013 off season.  
-This is our first attempt at codding so we dont remomend you useing out code as an example.  
-
+Development of this code began after the 2013 FRC season. This is our first attempt at writing Java code since we switched to LabVIEW in 2012.
 
 Links
 =========
-http://frcwest.com/  
-http://www.usfirst.org/  
-http://www.thebluealliance.com/team/1482    Blue alliance profile  
-
-
-
+http://frcwest.com/   
+http://www.thebluealliance.com/team/1482
 
 TODO
 =========
 - [X] Learn how to use a git reposotory
 - [ ] Fix drive code
-- [ ] Fix botton press
-- [ ] Make vision targeting
+- [ ] Fix button press detection
+- [ ] Write vision targeting code
