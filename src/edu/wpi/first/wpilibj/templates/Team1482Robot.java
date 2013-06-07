@@ -75,15 +75,18 @@ public class Team1482Robot extends IterativeRobot {
         
     //Set up air compressor and Solenoids
     Compressor airCompressor = new Compressor(1,1);
-    Solenoid lift       = new Solenoid(1);
-    Solenoid liftreset  = new Solenoid(2);
-    Solenoid drop       = new Solenoid(3);
-    Solenoid dropreset  = new Solenoid(4);
-    Solenoid grab       = new Solenoid(5);
-    Solenoid grabreset  = new Solenoid(6); 
-    Solenoid angle      = new Solenoid(7);
-    Solenoid anglereset = new Solenoid(8);
+    public Solenoid lift       = new Solenoid(1);
+    public Solenoid liftreset  = new Solenoid(2);
+    public Solenoid drop       = new Solenoid(3);
+    public Solenoid dropreset  = new Solenoid(4);
+    public Solenoid grab       = new Solenoid(5);
+    public Solenoid grabreset  = new Solenoid(6); 
+    public Solenoid angle      = new Solenoid(7);
+    public Solenoid anglereset = new Solenoid(8);
     
+    
+    public final int timeA = 200;
+    public final int timeB = 400;            
     //Set up camera
     //AxisCamera camera;
     //CriteriaCollection cc;
@@ -129,6 +132,7 @@ public class Team1482Robot extends IterativeRobot {
     public void autonomousInit() {
             System.out.println("Autonomous started");
             m_autoPeriodicLoops = 0; //resets loop counter on entering auto
+            
             getWatchdog().setEnabled(false);
             getWatchdog().setExpiration(0.5);
             
@@ -211,18 +215,19 @@ public class Team1482Robot extends IterativeRobot {
             if (m_button_1 == "pressed") {
                 System.out.println("Button 1 just pressed");
                 //When pressed
-
-                //If retracted, extend
-                if (m_liftstate == false) {
-                    lift.set(true);
-                    liftreset.set(false);
-                    m_liftstate = true;
-                } //If iextended, retract
-                else {
-                    lift.set(false);
-                    liftreset.set(true);
-                    m_liftstate = false;
-                }
+                common.liftSet(m_liftstate, lift , liftreset);
+                
+//                //If retracted, extend
+//                if (m_liftstate == false) {
+//                    lift.set(true);
+//                    liftreset.set(false);
+//                    m_liftstate = true;
+//                } //If iextended, retract
+//                else {
+//                    lift.set(false);
+//                    liftreset.set(true);
+//                    m_liftstate = false;
+//                }
             }
             
             //***Cycle code**//
@@ -230,23 +235,13 @@ public class Team1482Robot extends IterativeRobot {
             if (m_button_2 == "pressed"){
                 cyclecount = 0;
             }
-            else if (m_button_2 == "held"){
-                switch (cyclecount) {
-                    case 0 :
-                        angle.set(false);
-                        anglereset.set(true);
-                        break;
-                    case 200 :
-                        angle.set(true);
-                        anglereset.set(false);
-                        break;
-                    case 400 :
-                        cyclecount = 0;
-                        
-                }
-            cyclecount++;
-            }
             
+            else if (m_button_2 == "held"){
+            
+                common.cycle(angle, anglereset, cyclecount, timeA, timeB);               
+            }
+            cyclecount++;
+                  
             //Feed watchdog
             getWatchdog().feed();
             Timer.delay(0.005);
