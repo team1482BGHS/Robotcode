@@ -88,8 +88,8 @@ public class Team1482Robot extends IterativeRobot {
     public final int timeA = 200;
     public final int timeB = 400;            
     //Set up camera
-    //AxisCamera camera;
-    //CriteriaCollection cc;
+    public AxisCamera camera;
+    CriteriaCollection cc;
 
     public Team1482Robot() {
         System.out.println("BuiltinDefaultCode Constructor Started\n");
@@ -104,10 +104,10 @@ public class Team1482Robot extends IterativeRobot {
     //************Initalize************
     //Any code in this section will run once when the robot is turned on.
     public void robotInit() {
-            //camera = AxisCamera.getInstance();
-            //cc = new CriteriaCollection();
-            //cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 0, false);
-            //cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 0, false); //todo: check WPILibJ documentation
+            camera = AxisCamera.getInstance();
+            cc = new CriteriaCollection();
+            cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 0, false);
+            cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 0, false); //todo: check WPILibJ documentation
             SmartDashboard.putBoolean("Grab state", false);
             SmartDashboard.putBoolean("Lift state", false);
             System.out.println("RobotInit() completed. \n");
